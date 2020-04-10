@@ -23,13 +23,24 @@
 /******************************************************************************
  *                                                                    Defines */
 
+// Operations
 #define OPTION(t) option_##t
 #define NONE(t) none_##t()
-#define JUST(t, v) just_##t(v)
+#define JUST(t, x) just_##t(x)
 
-#define UNWRAP_OR(t, v, d) unwrap_or_##t(v, d)
+#define IS_NONE(t, x) is_none_##t(x)
+#define IS_JUST(t, x) is_just_##t(x)
 
-// This would be defined in the header
+#define UNWRAP(t, x) unwrap_##t(x)
+#define UNWRAP_OR(t, x, y) unwrap_or_##t(x, y)
+
+#define OR(t, x, y) or_##t(x, y)
+#define AND(t, x, y) and_##t(x, y)
+
+// More? For inspiration, see
+// https://notes.iveselov.info/programming/cheatsheet-rust-option-vs-haskell-maybe
+
+// Declaration
 #define DECL_OPTION(type) \
     struct option_obfuscated_##type { \
         char data[sizeof(bool) + sizeof(type)]; \
@@ -37,7 +48,11 @@
     typedef struct option_obfuscated_##type OPTION(type); \
     OPTION(type) none_##type(void); \
     OPTION(type) just_##type(type x); \
-    type unwrap_or_##type(OPTION(type) x, type alt);
-    // ...
+    bool is_none_##type(OPTION(type) x); \
+    bool is_just_##type(OPTION(type) x); \
+    type unwrap_##type(OPTION(type) x); \
+    type unwrap_or_##type(OPTION(type) x, type y); \
+    OPTION(type) or_##type(OPTION(type) x, OPTION(type) y); \
+    OPTION(type) and_##type(OPTION(type) x, OPTION(type) y);
 
 #endif /* header guard */

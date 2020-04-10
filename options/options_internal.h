@@ -15,6 +15,7 @@
 
 /******************************************************************************
  *                                                                 Inclusions */
+#include <assert.h>
 #include "options.h"
 
 /******************************************************************************
@@ -49,9 +50,30 @@
         }; \
         return OBFUSCATE(just); \
     } \
+    bool is_none_##type(OPTION(type) x) { \
+        OPTION_INTERNAL(type) dx = DEOBFUSCATE(x); \
+        return !dx.u.actual.present; \
+    } \
+    bool is_just_##type(OPTION(type) x) { \
+        OPTION_INTERNAL(type) dx = DEOBFUSCATE(x); \
+        return dx.u.actual.present; \
+    } \
+    type unwrap_##type(OPTION(type) x) { \
+        OPTION_INTERNAL(type) dx = DEOBFUSCATE(x); \
+        assert(dx.u.actual.present); \
+        return dx.u.actual.value; \
+    } \
     type unwrap_or_##type(OPTION(type) x, type alt) { \
         OPTION_INTERNAL(type) dx = DEOBFUSCATE(x); \
         return dx.u.actual.present ? dx.u.actual.value : alt; \
-    }
+    } \
+    OPTION(type) or_##type(OPTION(type) x, OPTION(type) y) { \
+        OPTION_INTERNAL(type) dx = DEOBFUSCATE(x); \
+        return dx.u.actual.present ? x : y; \
+    } \
+    OPTION(type) and_##type(OPTION(type) x, OPTION(type) y) { \
+        OPTION_INTERNAL(type) dx = DEOBFUSCATE(x); \
+        return dx.u.actual.present ? y : x; \
+    } \
 
 #endif /* header guard */

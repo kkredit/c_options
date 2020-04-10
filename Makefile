@@ -15,11 +15,11 @@ WARNINGS := \
 	-Wwrite-strings -Wunknown-pragmas -Wunused-macros \
 	-Wnested-externs -Wpointer-arith -Wswitch -Wredundant-decls \
 	-Wreturn-type -Wshadow -Wunused -Wuninitialized \
-	-Wdeclaration-after-statement -Wmissing-prototypes \
+	-Wmissing-prototypes \
 	-Wmissing-declarations -Wundef -fstrict-aliasing -Wstrict-aliasing=3 \
 	-Wformat=2 -Wsuggest-attribute=pure -Wsuggest-attribute=const \
 	-Wfatal-errors
-	# -Waggregate-return -Wstrict-prototypes
+	# -Waggregate-return -Wstrict-prototypes -Wdeclaration-after-statement
 
 OTHER_OPTS := -msign-return-address
 
