@@ -1,9 +1,6 @@
-# ------------------------------------------------
-# Generic C Makefile
-# ------------------------------------------------
 
-TARGET   := prog
-SRCDIR   := src
+TARGET   := example
+SRCDIR   := example
 INCDIRS  := . options
 OBJDIR   := build
 BINDIR   := build
