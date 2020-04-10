@@ -4,6 +4,7 @@
 
 TARGET   := prog
 SRCDIR   := src
+INCDIRS  := . options
 OBJDIR   := build
 BINDIR   := build
 
@@ -23,13 +24,13 @@ WARNINGS := \
 OTHER_OPTS := -msign-return-address
 
 CC       := gcc
-CFLAGS   := -std=c99 $(WARNINGS) -I.
+CFLAGS   := -std=c99 $(WARNINGS) $(foreach dir,$(INCDIRS),-I$(dir))
 
 LINKER   := gcc
-LFLAGS   := $(WARNINGS) -I.
+LFLAGS   := $(WARNINGS) $(foreach dir,$(INCDIRS),-I$(dir))
 
 SOURCES  := $(wildcard $(SRCDIR)/*.c)
-INCLUDES := $(wildcard $(SRCDIR)/*.h)
+INCLUDES := $(wildcard $(SRCDIR)/*.h) $(wildcard $(INCDIR)/*.h)
 OBJECTS  := $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SOURCES))
 
 .PHONY: all clean compile
