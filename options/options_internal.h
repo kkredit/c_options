@@ -75,5 +75,18 @@
         OPTION_INTERNAL(type) dx = DEOBFUSCATE(x); \
         return dx.u.actual.present ? y : x; \
     } \
+    bool eq_##type(OPTION(type) x, OPTION(type) y) { \
+        OPTION_INTERNAL(type) dx = DEOBFUSCATE(x); \
+        OPTION_INTERNAL(type) dy = DEOBFUSCATE(y); \
+        return (!dx.u.actual.present && !dy.u.actual.present) || \
+               (dx.u.actual.present && dy.u.actual.present \
+                && dx.u.actual.value == dy.u.actual.value); \
+    } \
+    bool equal_##type(OPTION(type) x, OPTION(type) y) { \
+        OPTION_INTERNAL(type) dx = DEOBFUSCATE(x); \
+        OPTION_INTERNAL(type) dy = DEOBFUSCATE(y); \
+        return (dx.u.actual.present && dy.u.actual.present \
+                && dx.u.actual.value == dy.u.actual.value); \
+    }
 
 #endif /* header guard */

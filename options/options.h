@@ -34,6 +34,9 @@
 #define UNWRAP(t, x) unwrap_##t(x)
 #define UNWRAP_OR(t, x, y) unwrap_or_##t(x, y)
 
+#define EQ(t, x, y) eq_##t(x, y)
+#define EQUAL(t, x, y) equal_##t(x, y)
+
 #define OR(t, x, y) or_##t(x, y)
 #define AND(t, x, y) and_##t(x, y)
 
@@ -52,6 +55,8 @@
     bool is_just_##type(OPTION(type) x); \
     type unwrap_##type(OPTION(type) x); \
     type unwrap_or_##type(OPTION(type) x, type y); \
+    bool eq_##type(OPTION(type) x, OPTION(type) y); \
+    bool equal_##type(OPTION(type) x, OPTION(type) y); \
     OPTION(type) or_##type(OPTION(type) x, OPTION(type) y); \
     OPTION(type) and_##type(OPTION(type) x, OPTION(type) y);
 
