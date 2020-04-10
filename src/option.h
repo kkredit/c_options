@@ -23,6 +23,11 @@
 #define NONE(t) none_##t()
 #define JUST(t, v) just_##t(v)
 
+// TODO: put these somewhere invisible to the calling library
+#define OPTION_INTERNAL(t) option_internal_##t
+#define OBFUSCATE(t, x) x.u.obfuscated
+#define DEOBFUSCATE(x) { .u.obfuscated = x }
+
 // This would be defined in the header
 
 // TODO: want the struct definition undeclared, so users can't abuse the system. But for that to be
@@ -30,14 +35,10 @@
 // pointer, but then we have dynamic memory management :/
 // See https://stackoverflow.com/questions/13634495/c-typedef-incomplete-type
 #define DECL_OPTION(type) \
-    struct option_s_##t { \
-        bool present; \
-        union { \
-            type value; \
-            int err; \
-        } u;\
+    struct option_obfuscated_##type { \
+        char data[sizeof(bool) + sizeof(type)]; \
     }; \
-    typedef struct option_s_##t OPTION(type); \
+    typedef struct option_obfuscated_##type OPTION(type); \
     OPTION(type) none_##type(void); \
     OPTION(type) just_##type(type x); \
     type unwrap_or_##type(OPTION(type) x, type def);
@@ -46,22 +47,32 @@
 // This would be defined in the implementation file
 // option_##type;
 #define DEFN_OPTION(type) \
+    struct option_s_##type { \
+        union { \
+            struct { \
+                bool present; \
+                type value; \
+            } internal; \
+            OPTION(type) obfuscated; \
+        } u; \
+    }; \
+    typedef struct option_s_##type OPTION_INTERNAL(type); \
     OPTION(type) none_##type(void) { \
-        OPTION(type) none = { \
-            .present = false, \
-            .u.err = -1 \
+        OPTION_INTERNAL(type) none = { \
+            .u.internal.present = false, \
         }; \
-        return none; \
+        return OBFUSCATE(type, none); \
     } \
     OPTION(type) just_##type(type x) { \
-        OPTION(type) just = { \
-            .present = true, \
-            .u.value = x \
+        OPTION_INTERNAL(type) just = { \
+            .u.internal.present = true, \
+            .u.internal.value = x \
         }; \
-        return just; \
+        return OBFUSCATE(type, just); \
     } \
     type unwrap_or_##type(OPTION(type) x, type def) { \
-        return x.present ? x.u.value : def; \
+        OPTION_INTERNAL(type) actual = DEOBFUSCATE(x); \
+        return actual.u.internal.present ? actual.u.internal.value : def; \
     }
     // ...
 
