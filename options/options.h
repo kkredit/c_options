@@ -26,19 +26,26 @@
 // Operations
 #define OPTION(t) option_##t
 #define NONE(t) none_##t()
-#define JUST(t, x) just_##t(x)
+#define JUST(t, a) just_##t(a)
 
 #define IS_NONE(t, x) is_none_##t(x)
 #define IS_JUST(t, x) is_just_##t(x)
 
 #define UNWRAP(t, x) unwrap_##t(x)
-#define UNWRAP_OR(t, x, y) unwrap_or_##t(x, y)
+#define UNWRAP_OR(t, x, a) unwrap_or_##t(x, a)
 
 #define EQ(t, x, y) eq_##t(x, y)
 #define EQUAL(t, x, y) equal_##t(x, y)
 
 #define OR(t, x, y) or_##t(x, y)
 #define AND(t, x, y) and_##t(x, y)
+
+// Control flow
+#define IF_LET(t, x, a, block) \
+    if (IS_JUST(t, x)) { \
+        t a = UNWRAP(t, x); \
+        block \
+    }
 
 // More? For inspiration, see
 // https://notes.iveselov.info/programming/cheatsheet-rust-option-vs-haskell-maybe
@@ -50,11 +57,11 @@
     }; \
     typedef struct option_obfuscated_##type OPTION(type); \
     OPTION(type) none_##type(void); \
-    OPTION(type) just_##type(type x); \
+    OPTION(type) just_##type(type a); \
     bool is_none_##type(OPTION(type) x); \
     bool is_just_##type(OPTION(type) x); \
     type unwrap_##type(OPTION(type) x); \
-    type unwrap_or_##type(OPTION(type) x, type y); \
+    type unwrap_or_##type(OPTION(type) x, type a); \
     bool eq_##type(OPTION(type) x, OPTION(type) y); \
     bool equal_##type(OPTION(type) x, OPTION(type) y); \
     OPTION(type) or_##type(OPTION(type) x, OPTION(type) y); \

@@ -17,3 +17,4 @@ Operations:
 - `EQUAL`: compares two options using `==`; none does not match none
 - `OR`: return the first option if present, else the second
 - `AND`: return the first option if not present, else the second
+- `IF_LET`: unwrap the option if present and execute a block

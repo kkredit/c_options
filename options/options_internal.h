@@ -43,10 +43,10 @@
         }; \
         return OBFUSCATE(none); \
     } \
-    OPTION(type) just_##type(type x) { \
+    OPTION(type) just_##type(type a) { \
         OPTION_INTERNAL(type) just = { \
             .u.actual.present = true, \
-            .u.actual.value = x \
+            .u.actual.value = a \
         }; \
         return OBFUSCATE(just); \
     } \
@@ -63,9 +63,9 @@
         assert(dx.u.actual.present); \
         return dx.u.actual.value; \
     } \
-    type unwrap_or_##type(OPTION(type) x, type alt) { \
+    type unwrap_or_##type(OPTION(type) x, type a) { \
         OPTION_INTERNAL(type) dx = DEOBFUSCATE(x); \
-        return dx.u.actual.present ? dx.u.actual.value : alt; \
+        return dx.u.actual.present ? dx.u.actual.value : a; \
     } \
     OPTION(type) or_##type(OPTION(type) x, OPTION(type) y) { \
         OPTION_INTERNAL(type) dx = DEOBFUSCATE(x); \
