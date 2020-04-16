@@ -92,5 +92,15 @@ int main() {
         (void)z;
     })
 
+
+    /* IF_NOT */
+    IF_NOT(int, just3, {
+        assert(false);
+    })
+
+    IF_NOT(int, none, {
+        assert(true);
+    })
+
     return 0;
 }

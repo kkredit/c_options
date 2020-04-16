@@ -47,6 +47,11 @@
         block \
     }
 
+#define IF_NOT(t, x, block) \
+    if (IS_NONE(t, x)) { \
+        block \
+    }
+
 // More? For inspiration, see
 // https://notes.iveselov.info/programming/cheatsheet-rust-option-vs-haskell-maybe
 
